@@ -20,6 +20,9 @@ module.exports = function(grunt) {
     if (!options.key) {
       grunt.fail.warn('Missing key property.');
     }
+    if (!options.dest) {
+      grunt.fail.warn('Missing dest property.');
+    }
     var key = options.key;
 
     // Iterate over all specified file groups.
@@ -32,18 +35,18 @@ module.exports = function(grunt) {
           return false;
         } else {
           var filename = path.basename(filepath);
-          var newFilename = (grunt.file.isDir(options.dest) ? [filepath, 'encrypted'].join('.') : (options.ext) ? [options.dest, options.ext].join('.') : options.dest);
+          var newFilename = options.dest + '/' + [filename, (options.ext ? options.ext : 'encrypted')].join('.');
           var contents = grunt.file.read(filepath);
 
           if (!options.decrypt) {
-            var cipher = crypto.createCipher('aes-256-cbc', key)
-            cipher.update(contents, 'utf8', 'base64');
-            contents = cipher.final('base64')
+            var cipher = crypto.createCipher('aes-256-cbc', key);
+            contents = cipher.update(contents, 'utf8', 'base64');
+            contents += cipher.final('base64');
           }
           else {
             var decipher = crypto.createDecipher('aes-256-cbc', key);
-            decipher.update(contents, 'base64', 'utf8');
-            contents = decipher.final('utf8');
+            contents = decipher.update(contents, 'base64', 'utf8');
+            contents += decipher.final('utf8');
             var ext = filepath.split('.');
             ext = ext[ext.length - 1];
             newFilename = newFilename.split('.' + ext).join('');

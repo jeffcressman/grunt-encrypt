@@ -33,21 +33,21 @@ module.exports = function(grunt) {
       encrypt: {
         options: {
           key: 'test',
-          dest: 'test/tmp/encrypted',
+          dest: 'test/tmp',
           ext: 'encrypted'
         },
         files: {
-          'test/encrypted': ['test/fixtures/123']
+          'test/encrypted': ['test/fixtures/123', 'test/fixtures/secrets.json']
         }
       },
       decrypt: {
         options: {
           key: 'test',
-          dest: 'test/tmp/decrypted',
+          dest: 'test/tmp',
           decrypt: true
         },
         files: {
-          'test/decrypted': ['test/tmp/encrypted.encrypted']
+          'test/decrypted': ['test/tmp/123.encrypted', 'test/tmp/secrets.json.encrypted']
         }
       }
     },

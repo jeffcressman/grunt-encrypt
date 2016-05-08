@@ -24,16 +24,24 @@ var grunt = require('grunt');
 
 exports.encrypt = {
   encrypt: function(test) {
-    var actual = grunt.file.read('test/tmp/encrypted.encrypted');
-    var expected = grunt.file.read('test/expected/123');
-    test.equal(actual, expected, 'should describe what the default behavior is.');
+    var actual = grunt.file.read('test/tmp/123.encrypted');
+    var expected = grunt.file.read('test/expected/123.encrypted');
+    test.equal(actual, expected, 'should encrypt a text file');
+
+    actual = grunt.file.read('test/tmp/secrets.json.encrypted');
+    expected = grunt.file.read('test/expected/secrets.json.encrypted');
+    test.equal(actual, expected, 'should encrypt a json file');
 
     test.done();
   },
   decrypt: function(test) {
-    var actual = grunt.file.read('test/tmp/decrypted');
+    var actual = grunt.file.read('test/tmp/123');
     var expected = grunt.file.read('test/fixtures/123');
-    test.equal(actual, expected, 'should describe what the default behavior is.');
+    test.equal(actual, expected, 'should decrypt a text file');
+
+    actual = grunt.file.read('test/tmp/secrets.json');
+    expected = grunt.file.read('test/fixtures/secrets.json');
+    test.equal(actual, expected, 'should decrypt a json file');
 
     test.done();
   }
